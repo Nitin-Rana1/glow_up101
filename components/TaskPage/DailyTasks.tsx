@@ -67,7 +67,7 @@ export default function DailyTasks({
       localStorage.setItem(type + "Tasks", JSON.stringify(currDailyTasks));
       setDailyTasks(currDailyTasks);
     }
-  }, []);
+  }, [days, localStorageKey, type]);
   return (
     <Box padding={0.5}>
       <h2>{type} Task</h2>
@@ -124,9 +124,9 @@ export default function DailyTasks({
               No tasks available right now.
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              It looks like you haven't encountered enough tips yet. Please wait
-              until the next day to see refreshed or generate new tips on tips
-              page .
+              It looks like you haven&apos;t encountered enough tips yet. Please
+              wait until the next day to see refreshed or generate new tips on
+              tips page .
             </Typography>
           </Box>
         )}

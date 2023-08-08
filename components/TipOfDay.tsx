@@ -29,7 +29,7 @@ export default function TipOfDay() {
       localStorage.setItem("shownUpTo", newNo.toString());
       loadTips(no, 2);
     }
-  }, []);
+  }, [tips.length, loadTips]);
 
   function loadTips(shownUpToLS: number, n: number) {
     if (tips.length >= n) return;
