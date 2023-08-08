@@ -16,6 +16,31 @@ export default function TipOfDay() {
   //shownUpTo var
   useEffect(() => {
     // Check if skillLevels and tipsShown are present in localStorage
+    function loadTips(shownUpToLS: number, n: number) {
+      if (tips.length >= n) return;
+      let temp: Tip[] = tips;
+      let tempTipsShown;
+
+      //e33333333333333333333333
+      const storedTipsShown = localStorage.getItem("tipsShown");
+      if (!storedTipsShown) {
+        tempTipsShown = [];
+      } else {
+        tempTipsShown = JSON.parse(storedTipsShown);
+      }
+      //33333333333333333333333333
+      // essential : 4 16 19 75
+      let c = 0,
+        ind;
+      for (let i = shownUpToLS + 1; c < n; i++) {
+        ind = i % tipsList.length;
+        temp.push(tipsList[randomOrderArray[ind]]);
+        tempTipsShown.push(randomOrderArray[ind]);
+        c++;
+      }
+      setTips([...temp]);
+      localStorage.setItem("tipsShown", JSON.stringify(tempTipsShown));
+    }
     const shownUpTo = localStorage.getItem("shownUpTo");
     if (!shownUpTo) {
       localStorage.setItem("shownUpTo", "3");
@@ -29,33 +54,7 @@ export default function TipOfDay() {
       localStorage.setItem("shownUpTo", newNo.toString());
       loadTips(no, 2);
     }
-  }, [tips.length, loadTips]);
-
-  function loadTips(shownUpToLS: number, n: number) {
-    if (tips.length >= n) return;
-    let temp: Tip[] = tips;
-    let tempTipsShown;
-
-    //e33333333333333333333333
-    const storedTipsShown = localStorage.getItem("tipsShown");
-    if (!storedTipsShown) {
-      tempTipsShown = [];
-    } else {
-      tempTipsShown = JSON.parse(storedTipsShown);
-    }
-    //33333333333333333333333333
-    // essential : 4 16 19 75
-    let c = 0,
-      ind;
-    for (let i = shownUpToLS + 1; c < n; i++) {
-      ind = i % tipsList.length;
-      temp.push(tipsList[randomOrderArray[ind]]);
-      tempTipsShown.push(randomOrderArray[ind]);
-      c++;
-    }
-    setTips([...temp]);
-    localStorage.setItem("tipsShown", JSON.stringify(tempTipsShown));
-  }
+  }, [tips.length]);
 
   return (
     <Grid container direction="column" alignItems="center" spacing={3}>
