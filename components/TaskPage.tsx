@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { skillsNumber, tipsList } from "../data";
 import TaskCard from "./Cards/TaskCard";
 import DailyTasks from "./TaskPage/DailyTasks";
-import MonthlyTasks from "./TaskPage/MonthlyTasks";
-import WeeklyTasks from "./TaskPage/WeeklyTasks";
 
 export default function TaskPage({ darkMode }: { darkMode: boolean }) {
   const [tipsShown, setTipsShown] = useState<number[]>([]);
