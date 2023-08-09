@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { tipsList } from "../../data";
 import TaskCard from "../Cards/TaskCard";
-import { Box, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+
+import { useTheme } from "@mui/material/styles";
 
 export default function DailyTasks({
   days,
   localStorageKey,
   type,
+  darkMode,
 }: {
   days: number;
   localStorageKey: string;
   type: string;
+  darkMode: boolean;
 }) {
   const [skillsLevel, setSkillsLevel] = useState<number[]>([]);
   const [dailyTasks, setDailyTasks] = useState<Task[]>([]);
@@ -68,9 +72,23 @@ export default function DailyTasks({
       setDailyTasks(currDailyTasks);
     }
   }, [days, localStorageKey, type]);
+  const theme = useTheme();
+
   return (
-    <Box padding={0.5}>
-      <h2>{type} Task</h2>
+    <Container
+      maxWidth="md"
+      sx={{
+        background: theme.palette.mode === "dark" ? "#000" : "#fff",
+      }}
+    >
+      <Typography
+        variant="h5"
+        marginTop={3}
+        marginBottom={1}
+        color={darkMode ? "textPrimary" : "inherit"}
+      >
+        {type} Task
+      </Typography>
       <Box sx={{ maxHeight: "60vh" }} overflow={"auto"}>
         {dailyTasks.map((arr, i) => {
           const tip = tipsList[arr.index];
@@ -115,6 +133,7 @@ export default function DailyTasks({
               lvl={skillsLevel[arr.index]}
               task={arr}
               skillsLevel={skillsLevel}
+              darkMode={darkMode}
             />
           );
         })}
@@ -124,14 +143,14 @@ export default function DailyTasks({
               No tasks available right now.
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              It looks like you haven&apos;t encountered enough tips yet. Please
-              wait until the next day to see refreshed or generate new tips on
-              tips page .
+              It looks like you haven&apos;t encountered enough tips yet. <br />
+              Please wait until the next day to see refreshed tips or generate
+              new tips on tips page .
             </Typography>
           </Box>
         )}
       </Box>
-    </Box>
+    </Container>
   );
 }
 function getDateDifference(startDate: string, endDate: string) {

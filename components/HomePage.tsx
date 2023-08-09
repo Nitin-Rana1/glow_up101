@@ -7,7 +7,17 @@ import ProfilePage from "./ProfilePage";
 import TaskPage from "./TaskPage";
 import TipOfDay from "./TipOfDay";
 import Image from "next/image";
-export default function HomePage() {
+import { useTheme } from "@mui/material/styles";
+import { Container } from "@mui/material";
+
+export default function HomePage({
+  toggleDarkMode,
+  darkMode,
+}: {
+  toggleDarkMode: () => void;
+  darkMode: boolean;
+}) {
+  const theme = useTheme();
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -15,7 +25,13 @@ export default function HomePage() {
   };
   const [tabno, setTabno] = useState(0);
   return (
-    <main>
+    <Container
+      maxWidth="md"
+      sx={{
+        background: theme.palette.mode === "dark" ? "#000" : "#fff",
+        minHeight: "100vh",
+      }}
+    >
       {/* <h2>🅶 🅻🅾🆆 🆄🅿 101</h2> */}
       <Box display="flex" justifyContent="left" alignItems="center">
         <div
@@ -26,12 +42,21 @@ export default function HomePage() {
             marginTop: "2vh",
           }}
         >
-          <Image
-            src="/profilePics/head3.png"
-            alt="profile pic"
-            fill
-            objectFit="fill"
-          />
+          {darkMode ? (
+            <Image
+              src="/header/head3.png"
+              alt="profile pic"
+              fill
+              objectFit="fill"
+            />
+          ) : (
+            <Image
+              src="/header/head3.png"
+              alt="profile pic"
+              fill
+              objectFit="fill"
+            />
+          )}
         </div>
       </Box>
       <Box sx={{ width: "100%" }}>
@@ -47,9 +72,10 @@ export default function HomePage() {
           </Tabs>
         </Box>
         {tabno == 0 && <TipOfDay />}
-        {tabno == 1 && <TaskPage />}
-        {tabno == 2 && <ProfilePage />}
+        {tabno == 1 && <TaskPage darkMode={darkMode} />}
+
+        {tabno == 2 && <ProfilePage darkMode={darkMode} />}
       </Box>
-    </main>
+    </Container>
   );
 }

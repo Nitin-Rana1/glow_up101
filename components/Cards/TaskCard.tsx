@@ -20,12 +20,14 @@ export default function TaskCard({
   lvl,
   task,
   skillsLevel,
+  darkMode,
 }: {
   tip: Tip;
   checkBoxClicked: (cmd: string, ind: number) => void;
   lvl: number;
   task: Task;
   skillsLevel: number[];
+  darkMode: boolean;
 }) {
   const handleCheckboxChange = () => {
     if (task.completed) {
@@ -41,11 +43,20 @@ export default function TaskCard({
   return (
     <Card
       variant="outlined"
-      style={{
-        backgroundColor: task.completed ? "#d4ffd8" : "#f0f0f0",
+      sx={{
+        backgroundColor: darkMode
+          ? task.completed
+            ? "#b87d23"
+            : "black"
+          : task.completed
+          ? "#ffc772"
+          : "white",
+
         boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
         borderRadius: "8px",
         marginBottom: "16px",
+        border: "1px solid #ccc", // Single outline for the card
+        color: darkMode ? "textPrimary" : "inherit", // Adjust text color
       }}
     >
       <CardContent>
@@ -106,9 +117,6 @@ export default function TaskCard({
           })}
         </Collapse>
       </CardContent>
-      {/* <CardActions>
-        
-      </CardActions> */}
     </Card>
   );
 }

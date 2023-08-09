@@ -5,7 +5,7 @@ import { Grid, Typography, Box, LinearProgress, Divider } from "@mui/material";
 import HexagonDiagram from "./Diagram/HexagonDiagram";
 import Image from "next/image";
 
-export default function ProfilePage() {
+export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
   const [skillsLevel, setSkillsLevel] = useState<number[]>([]);
   const [myLvl, setMyLvl] = useState(0);
 
@@ -32,18 +32,27 @@ export default function ProfilePage() {
   };
 
   return (
-    <div>
+    <Box margin={0}>
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         padding={"3vw 6vw"}
+        marginTop={2}
       >
         <Grid>
-          <Typography variant="h5" marginBottom={2}>
+          <Typography
+            variant="h5"
+            marginBottom={2}
+            color={darkMode ? "textPrimary" : "inherit"}
+          >
             Demon Buster
           </Typography>
-          <Typography variant="h5" marginBottom={1}>
+          <Typography
+            variant="h5"
+            marginBottom={1}
+            color={darkMode ? "textPrimary" : "inherit"}
+          >
             Level: {Math.floor(myLvl)}
           </Typography>
           <LinearProgress
@@ -55,7 +64,7 @@ export default function ProfilePage() {
         <Box display="flex" justifyContent="center" alignItems="center">
           <div style={{ width: "25vw", height: "25vh", position: "relative" }}>
             <Image
-              src="/profilePics/weak.jpg"
+              src="/profilePics/weak2.png"
               alt="profile pic"
               fill
               objectFit="cover"
@@ -65,15 +74,24 @@ export default function ProfilePage() {
       </Box>
       <Divider variant="middle" sx={{ margin: "2rem 0" }} /> {/* Use Divider */}
       <Grid item xs={12}>
-        <Typography variant="h6" align="center">
+        <Typography
+          variant="h6"
+          align="center"
+          color={darkMode ? "textPrimary" : "inherit"}
+        >
           Stats
         </Typography>
       </Grid>
       <Grid item xs={12}>
         <HexagonDiagram data={statsData} />
       </Grid>
+      <Divider variant="middle" sx={{ margin: "2rem 0" }} /> {/* Use Divider */}
       <Grid item xs={12}>
-        <Typography variant="h6" align="center">
+        <Typography
+          variant="h6"
+          align="center"
+          color={darkMode ? "textPrimary" : "inherit"}
+        >
           Skills
         </Typography>
       </Grid>
@@ -86,6 +104,17 @@ export default function ProfilePage() {
           </Grid>
         );
       })}
-    </div>
+      {skillsLevel.every((lvl) => lvl === 0) && (
+        <Box textAlign="center" my={5}>
+          <Typography variant="body1" marginBottom={2}>
+            Unleash your potential! 🚀 Gain valuable skills by completing tasks
+            and watch your abilities grow.
+          </Typography>
+          <Typography variant="body1" marginBottom={4}>
+            Don&apos;t wait &ndash; start your journey of improvement today!
+          </Typography>
+        </Box>
+      )}
+    </Box>
   );
 }

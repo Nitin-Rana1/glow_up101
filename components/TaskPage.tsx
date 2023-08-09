@@ -5,7 +5,7 @@ import DailyTasks from "./TaskPage/DailyTasks";
 import MonthlyTasks from "./TaskPage/MonthlyTasks";
 import WeeklyTasks from "./TaskPage/WeeklyTasks";
 
-export default function TaskPage() {
+export default function TaskPage({ darkMode }: { darkMode: boolean }) {
   const [tipsShown, setTipsShown] = useState<number[]>([]);
   const [skillsLevel, setSkillsLevel] = useState<number[]>([]);
   const [dailyTasks, setDailyTasks] = useState<Task[]>([]);
@@ -126,15 +126,20 @@ export default function TaskPage() {
         days={1}
         localStorageKey={"lastDateOpenedDT"}
         type={"Daily"}
+        darkMode={darkMode}
       />
-      <DailyTasks days={7} localStorageKey={"lastDateOpenedWT"} type="Weekly" />
+      <DailyTasks
+        days={7}
+        localStorageKey={"lastDateOpenedWT"}
+        type="Weekly"
+        darkMode={darkMode}
+      />
       <DailyTasks
         days={30}
         localStorageKey={"lastDateOpenedMT"}
         type="Monthly"
+        darkMode={darkMode}
       />
-      {/* <WeeklyTasks />
-      <MonthlyTasks /> */}
     </main>
   );
 }
