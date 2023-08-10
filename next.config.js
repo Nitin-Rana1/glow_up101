@@ -1,14 +1,12 @@
 //sachin version
-const withPWA = require('next-pwa')({
-  dest: 'public',
-})
+const withPWA = require("next-pwa")({
+  dest: "public",
+});
 
 module.exports = withPWA({
-  swcMinify: true,
-  reactStrictMode: true,
-})
-
-
+  // swcMinify: true,
+  // reactStrictMode: true,
+});
 
 // /** @type {import('next').NextConfig} */
 // const nextConfig = {
