@@ -5,16 +5,16 @@ import TipCard from "./Cards/TipCard";
 export default function TipOfDay() {
   const [tips, setTips] = useState<Tip[]>([]);
 
-  const randomOrderArray = [
-    4, 16, 19, 75, 53, 46, 67, 32, 41, 89, 77, 92, 38, 9, 68, 74, 55, 13, 42,
-    91, 30, 31, 65, 85, 14, 11, 57, 71, 98, 25, 21, 76, 50, 73, 10, 97, 87, 26,
-    8, 58, 6, 56, 72, 36, 35, 49, 44, 39, 48, 18, 79, 78, 84, 0, 86, 62, 54, 96,
-    80, 33, 83, 63, 12, 47, 90, 2, 28, 27, 34, 64, 59, 45, 20, 66, 23, 1, 70,
-    93, 40, 29, 17, 5, 95, 15, 7, 94, 61, 99, 51, 69, 3, 37, 81, 82, 22, 43, 88,
-    52, 60, 24, 100,
-  ];
   //shownUpTo var
   useEffect(() => {
+    const randomOrderArray = [
+      4, 16, 19, 75, 53, 46, 67, 32, 41, 89, 77, 92, 38, 9, 68, 74, 55, 13, 42,
+      91, 30, 31, 65, 85, 14, 11, 57, 71, 98, 25, 21, 76, 50, 73, 10, 97, 87,
+      26, 8, 58, 6, 56, 72, 36, 35, 49, 44, 39, 48, 18, 79, 78, 84, 0, 86, 62,
+      54, 96, 80, 33, 83, 63, 12, 47, 90, 2, 28, 27, 34, 64, 59, 45, 20, 66, 23,
+      1, 70, 93, 40, 29, 17, 5, 95, 15, 7, 94, 61, 99, 51, 69, 3, 37, 81, 82,
+      22, 43, 88, 52, 60, 24, 100,
+    ];
     // Check if tipsShown are present in localStorage
     function loadTips(shownUpToLS: number, n: number) {
       if (tips.length >= n) return;
@@ -52,7 +52,7 @@ export default function TipOfDay() {
       localStorage.setItem("shownUpTo", newNo.toString());
       loadTips(no, 2);
     }
-  }, [tips.length]);
+  }, [tips]);
 
   return (
     <Grid container direction="column" alignItems="center" spacing={3}>
