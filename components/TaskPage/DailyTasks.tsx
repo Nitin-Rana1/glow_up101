@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { tipsList } from "../../data";
+import { statsNumber, tipsList } from "../../data";
 import TaskCard from "../Cards/TaskCard";
 import { Box, Container, Typography } from "@mui/material";
 
@@ -18,7 +18,7 @@ export default function DailyTasks({
 }) {
   const [skillsLevel, setSkillsLevel] = useState<number[]>([]);
   const [dailyTasks, setDailyTasks] = useState<Task[]>([]);
-
+  const [stats, setStats] = useState<number[]>([]);
   useEffect(() => {
     const storedSkillsLevel = localStorage.getItem("skillsLevel");
     if (!storedSkillsLevel) {
@@ -27,6 +27,15 @@ export default function DailyTasks({
       localStorage.setItem("skillsLevel", JSON.stringify(initialSkillsLevel));
     } else {
       setSkillsLevel(JSON.parse(storedSkillsLevel));
+    }
+    //check if stats present in LS
+    const statsLS = localStorage.getItem("stats");
+    if (!statsLS) {
+      const initialStats = [10, 6, 12, 3, 7, 5, 2, 10, 11, 7, 8, 6];
+      localStorage.setItem("stats", JSON.stringify(initialStats));
+      setStats([...initialStats]);
+    } else {
+      setStats(JSON.parse(statsLS));
     }
   }, []);
 
@@ -73,7 +82,35 @@ export default function DailyTasks({
     }
   }, [days, localStorageKey, type]);
   const theme = useTheme();
+  function updateDailyTask(cmd: string, ind: number) {
+    const storedDailyTasks = localStorage.getItem(type + "Tasks");
+    if (!storedDailyTasks) return;
+    let currDailyTasks: Task[] = JSON.parse(storedDailyTasks);
 
+    for (let task of currDailyTasks) {
+      if (task.index == ind) {
+        let newVal = cmd == "ADD";
+        if (newVal == task.completed) return;
+        task.completed = newVal;
+      }
+    }
+    localStorage.setItem(type + "Tasks", JSON.stringify(currDailyTasks));
+    setDailyTasks([...currDailyTasks]);
+  }
+  function updateStats(cmd: string, taskInd: number) {
+    const storedStats = localStorage.getItem("stats");
+    if (!storedStats) return;
+
+    let currStats: number[] = JSON.parse(storedStats);
+    const tempTip = tipsList[taskInd];
+    for (let ind of tempTip.statsIndexes) {
+      if (cmd == "ADD") {
+        currStats[ind] += 3;
+      } else currStats[ind] -= 3;
+    }
+    localStorage.setItem("stats", JSON.stringify(currStats));
+    setStats([...currStats]);
+  }
   return (
     <Container
       maxWidth="md"
@@ -90,8 +127,8 @@ export default function DailyTasks({
         {type} Task
       </Typography>
       <Box sx={{ maxHeight: "60vh" }} overflow={"auto"}>
-        {dailyTasks.map((arr, i) => {
-          const tip = tipsList[arr.index];
+        {dailyTasks.map((T, i) => {
+          const tip = tipsList[T.index];
           function checkBoxClicked(cmd: string, ind: number) {
             let temp = skillsLevel;
             for (let ind of tip.skillIndexes) {
@@ -105,33 +142,16 @@ export default function DailyTasks({
             setSkillsLevel([...temp]);
 
             updateDailyTask(cmd, ind);
-          }
-          function updateDailyTask(cmd: string, ind: number) {
-            const storedDailyTasks = localStorage.getItem(type + "Tasks");
-            if (!storedDailyTasks) return;
-            let currDailyTasks: Task[] = JSON.parse(storedDailyTasks);
-
-            for (let task of currDailyTasks) {
-              if (task.index == ind) {
-                let newVal = cmd == "ADD";
-                if (newVal == task.completed) return;
-                task.completed = newVal;
-              }
-            }
-            localStorage.setItem(
-              type + "Tasks",
-              JSON.stringify(currDailyTasks)
-            );
-            setDailyTasks([...currDailyTasks]);
+            updateStats(cmd, ind);
           }
 
           return (
             <TaskCard
-              key={type + "TASK" + arr.index.toString()}
+              key={type + "TASK" + T.index.toString()}
               checkBoxClicked={checkBoxClicked}
               tip={tip}
-              lvl={skillsLevel[arr.index]}
-              task={arr}
+              lvl={skillsLevel[T.index]}
+              task={T}
               skillsLevel={skillsLevel}
               darkMode={darkMode}
             />

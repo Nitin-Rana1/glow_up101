@@ -95,6 +95,7 @@ export default function TaskCard({
             style={{
               marginTop: "16px",
               color: "#555",
+              marginBottom: "1rem",
             }}
           >
             {tip.description}

@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import { buttonLines, skillsList, tipsList } from "../data";
+import { buttonLines, skillsList, statsNumber, tipsList } from "../data";
 import { useEffect, useState } from "react";
 import TipCard from "./Cards/TipCard";
 export default function TipOfDay() {
@@ -11,11 +11,11 @@ export default function TipOfDay() {
     8, 58, 6, 56, 72, 36, 35, 49, 44, 39, 48, 18, 79, 78, 84, 0, 86, 62, 54, 96,
     80, 33, 83, 63, 12, 47, 90, 2, 28, 27, 34, 64, 59, 45, 20, 66, 23, 1, 70,
     93, 40, 29, 17, 5, 95, 15, 7, 94, 61, 99, 51, 69, 3, 37, 81, 82, 22, 43, 88,
-    52, 60, 24,
+    52, 60, 24, 100,
   ];
   //shownUpTo var
   useEffect(() => {
-    // Check if skillLevels and tipsShown are present in localStorage
+    // Check if tipsShown are present in localStorage
     function loadTips(shownUpToLS: number, n: number) {
       if (tips.length >= n) return;
       let temp: Tip[] = tips;
@@ -44,12 +44,10 @@ export default function TipOfDay() {
     const shownUpTo = localStorage.getItem("shownUpTo");
     if (!shownUpTo) {
       localStorage.setItem("shownUpTo", "3");
-      console.log("IF mai 3");
       loadTips(-1, 4);
     } else {
       const no = parseInt(shownUpTo);
       const newNo = (no + 2) % tipsList.length;
-      console.log("else if  mai ", newNo);
       if (tips.length >= 2) return;
       localStorage.setItem("shownUpTo", newNo.toString());
       loadTips(no, 2);

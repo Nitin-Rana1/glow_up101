@@ -132,6 +132,12 @@ export default function TaskPage({ darkMode }: { darkMode: boolean }) {
         type="Weekly"
         darkMode={darkMode}
       />
+      {/* <DailyTasks
+        days={14}
+        localStorageKey={"lastDateOpenedBWT"}
+        type="Bi-Weekly"
+        darkMode={darkMode}
+      /> */}
       <DailyTasks
         days={30}
         localStorageKey={"lastDateOpenedMT"}

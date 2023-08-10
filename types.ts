@@ -1,12 +1,26 @@
 type Categories =
-  | "Fashion and Style"
   | "Fitness and Health"
+  | "Fashion and Style"
   | "Skincare and Grooming"
   | "Self-Care and Confidence"
   | "Health and Nutrition"
   | "Artistic Expression";
 
-type Frequency = "Daily" | "Weekly" | "Monthly";
+type Stat =
+  | "Agility" // 0: Represents physical agility and quickness.
+  | "Stamina" // 1: Represents endurance and resistance to fatigue.
+  | "Strength" // 2: Represents physical strength and power.
+  | "Endurance" // 3: Represents overall physical endurance.
+  | "Charisma" // 4: Represents social charm and persuasion.
+  | "Sleep Quality" // 5: Represents the quality of sleep one gets.
+  | "Mindfulness" // 6: Represents awareness and being present mentally.
+  | "Nutrition" // 7: Represents the quality of consumed nutrients.
+  | "Hydration" // 8: Represents the state of being hydrated.
+  | "Confidence" // 9: Represents self-assuredness and belief.
+  | "Creativity" // 10: Represents the ability to think and create uniquely.
+  | "Social Connections"; // 11: Represents the extent of social relationships and connections.
+
+type Frequency = "Daily" | "Weekly" | "Bi-Weekly" | "Monthly";
 // type Skill =
 interface Tip {
   id: number;
@@ -15,6 +29,7 @@ interface Tip {
   category: Categories;
   frequency: Frequency;
   skillIndexes: number[];
+  statsIndexes: number[];
 }
 
 interface Skill {
@@ -25,6 +40,10 @@ interface Skill {
 interface Task {
   index: number;
   completed: boolean;
+}
+interface StatsAndLabel {
+  labels: string[];
+  values: number[];
 }
 // skillsAssociated: Skill[];
 // const tipsList = [

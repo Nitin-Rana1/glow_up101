@@ -1,17 +1,15 @@
 import { useEffect, useRef } from "react";
 import Chart, { ChartData, ChartOptions } from "chart.js/auto";
 
-interface HexagonDiagramProps {
-  data: {
-    labels: string[];
-    values: number[];
-  };
-}
-
-export default function HexagonDiagram({ data }: HexagonDiagramProps) {
+export default function HexagonDiagram({
+  data,
+}: {
+  data: StatsAndLabel | null;
+}) {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    if (!data) return;
     if (chartRef.current) {
       const ctx = chartRef.current.getContext("2d");
       if (!ctx) return;
@@ -59,10 +57,10 @@ export default function HexagonDiagram({ data }: HexagonDiagramProps) {
       };
     }
   }, [data]);
-
+  if (!data) return <div>No Stats Yet!!</div>;
   return (
     <canvas
-      style={{ padding: "5vw 5vw 5vw 10vw" }}
+      style={{ padding: "0" }}
       ref={chartRef}
       width={400}
       height={400}
