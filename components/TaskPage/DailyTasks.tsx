@@ -4,7 +4,7 @@ import TaskCard from "../Cards/TaskCard";
 import { Box, Container, Typography } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
-
+import { motion, useAnimation, useInView } from "framer-motion";
 export default function DailyTasks({
   days,
   localStorageKey,
@@ -97,50 +97,152 @@ export default function DailyTasks({
     localStorage.setItem(type + "Tasks", JSON.stringify(currDailyTasks));
     setDailyTasks([...currDailyTasks]);
   }
+  function changeStats(value: number, action: string): number {
+    const incrementAmount = 1.5 + Math.random() * 0.5; // Constant increment amount for stats
+    const maxLimit = 100;
+    if (action === "inc") {
+      const newValue = value + incrementAmount;
+      return newValue <= maxLimit ? newValue : maxLimit;
+    } else if (action === "dec") {
+      const newValue = value - incrementAmount;
+      return newValue >= 0 ? newValue : 0;
+    }
+
+    return value;
+  }
+  function changeLevel(value: number, action: string): number {
+    const incrementAmount = 0.65 + Math.random() * 0.65; // Constant increment amount for stats
+    const maxLimit = 100;
+    if (action === "inc") {
+      const newValue = value + incrementAmount;
+      return newValue <= maxLimit ? newValue : maxLimit;
+    } else if (action === "dec") {
+      const newValue = value - incrementAmount;
+      return newValue >= 0 ? newValue : 0;
+    }
+    return value;
+  }
   function updateStats(cmd: string, taskInd: number) {
     const storedStats = localStorage.getItem("stats");
-    if (!storedStats) return;
-
+    if (!storedStats) return 0;
     let currStats: number[] = JSON.parse(storedStats);
     const tempTip = tipsList[taskInd];
     for (let ind of tempTip.statsIndexes) {
-      if (cmd == "ADD") {
-        currStats[ind] += 3;
-      } else currStats[ind] -= 3;
+      if (cmd === "ADD") {
+        currStats[ind] = changeStats(currStats[ind], "inc");
+      } else currStats[ind] = changeStats(currStats[ind], "dec");
     }
     localStorage.setItem("stats", JSON.stringify(currStats));
     setStats([...currStats]);
   }
+  function updateSkillsLevel(cmd: string, taskInd: number) {
+    let temp = skillsLevel;
+    let tip = tipsList[taskInd];
+    for (let ind of tip.skillIndexes) {
+      let oldLvl = temp[ind];
+      let newLvl;
+      if (cmd == "ADD") newLvl = changeLevel(oldLvl, "inc");
+      else newLvl = changeLevel(oldLvl, "dec");
+      temp[ind] = newLvl;
+    }
+    localStorage.setItem("skillsLevel", JSON.stringify(temp));
+    setSkillsLevel([...temp]);
+  }
   return (
+    // <Container
+    //   maxWidth="md"
+    //   sx={{
+    //     background: theme.palette.mode === "dark" ? "#000" : "#fff",
+    //   }}
+    // >
+    //   <Typography
+    //     variant="h5"
+    //     marginTop={3}
+    //     marginBottom={1}
+    //     color={darkMode ? "textPrimary" : "inherit"}
+    //   >
+    //     {type} Task
+    //   </Typography>
+    //   <Box sx={{ maxHeight: "60vh" }} overflow={"auto"}>
+    //     {dailyTasks.map((T, i) => {
+    //       const tip = tipsList[T.index];
+    //       function checkBoxClicked(cmd: string, ind: number) {
+    //         let temp = skillsLevel;
+    //         for (let ind of tip.skillIndexes) {
+    //           let oldLvl = temp[ind];
+    //           let newLvl;
+    //           if (cmd == "ADD") newLvl = oldLvl + 1.5;
+    //           else newLvl = oldLvl - 1.5;
+    //           temp[ind] = newLvl;
+    //         }
+    //         localStorage.setItem("skillsLevel", JSON.stringify(temp));
+    //         setSkillsLevel([...temp]);
+
+    //         updateDailyTask(cmd, ind);
+    //         updateStats(cmd, ind);
+    //       }
+
+    //       return (
+    //         <TaskCard
+    //           key={type + "TASK" + T.index.toString()}
+    //           checkBoxClicked={checkBoxClicked}
+    //           tip={tip}
+    //           lvl={skillsLevel[T.index]}
+    //           task={T}
+    //           skillsLevel={skillsLevel}
+    //           darkMode={darkMode}
+    //         />
+    //       );
+    //     })}
+    //     {dailyTasks.length === 0 && (
+    //       <Box sx={{ textAlign: "center", padding: "20px" }}>
+    //         <Typography variant="h6" color="textSecondary" marginBottom={1}>
+    //           No tasks available right now.
+    //         </Typography>
+    //         <Typography variant="body1" color="textSecondary">
+    //           It looks like you haven&apos;t encountered enough tips yet. <br />
+    //           Please wait until the next day to see refreshed tips or generate
+    //           new tips on tips page .
+    //         </Typography>
+    //       </Box>
+    //     )}
+    //   </Box>
+    // </Container>
+
+    //shake motion
     <Container
       maxWidth="md"
       sx={{
         background: theme.palette.mode === "dark" ? "#000" : "#fff",
       }}
+      component={motion.div}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
     >
       <Typography
         variant="h5"
         marginTop={3}
         marginBottom={1}
         color={darkMode ? "textPrimary" : "inherit"}
+        component={motion.h5}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
       >
         {type} Task
       </Typography>
-      <Box sx={{ maxHeight: "60vh" }} overflow={"auto"}>
+      <Box
+        sx={{ maxHeight: "60vh" }}
+        overflow={"auto"}
+        component={motion.div}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
         {dailyTasks.map((T, i) => {
           const tip = tipsList[T.index];
           function checkBoxClicked(cmd: string, ind: number) {
-            let temp = skillsLevel;
-            for (let ind of tip.skillIndexes) {
-              let oldLvl = temp[ind];
-              let newLvl;
-              if (cmd == "ADD") newLvl = oldLvl + 1.5;
-              else newLvl = oldLvl - 1.5;
-              temp[ind] = newLvl;
-            }
-            localStorage.setItem("skillsLevel", JSON.stringify(temp));
-            setSkillsLevel([...temp]);
-
+            updateSkillsLevel(cmd, ind);
             updateDailyTask(cmd, ind);
             updateStats(cmd, ind);
           }
@@ -158,14 +260,20 @@ export default function DailyTasks({
           );
         })}
         {dailyTasks.length === 0 && (
-          <Box sx={{ textAlign: "center", padding: "20px" }}>
+          <Box
+            sx={{ textAlign: "center", padding: "20px" }}
+            component={motion.div}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
             <Typography variant="h6" color="textSecondary" marginBottom={1}>
               No tasks available right now.
             </Typography>
             <Typography variant="body1" color="textSecondary">
               It looks like you haven&apos;t encountered enough tips yet. <br />
               Please wait until the next day to see refreshed tips or generate
-              new tips on tips page .
+              new tips on the tips page.
             </Typography>
           </Box>
         )}

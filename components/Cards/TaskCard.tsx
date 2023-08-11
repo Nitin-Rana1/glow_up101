@@ -46,7 +46,7 @@ export default function TaskCard({
       sx={{
         backgroundColor: darkMode
           ? task.completed
-            ? "#b87d23"
+            ? "#b56e02"
             : "black"
           : task.completed
           ? "#ffc772"

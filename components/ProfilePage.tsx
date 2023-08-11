@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import HexagonDiagram from "./Diagram/HexagonDiagram";
 import Image from "next/image";
-
+import { Variants, motion } from "framer-motion";
 export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
   const [skillsLevel, setSkillsLevel] = useState<number[]>([]);
   const [myLvl, setMyLvl] = useState<number>(0);
@@ -49,7 +49,7 @@ export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
       for (let lvl of temp) {
         sum += lvl;
       }
-      setMyLvl(sum / 2);
+      setMyLvl(sum / 5);
       setSkillsLevel(temp);
     }
 
@@ -90,9 +90,28 @@ export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
     }
   }, []);
   const [hexShort, setHexShort] = useState<boolean>(true);
+  const cardVariants: Variants = {
+    offscreen: {
+      y: 300,
+      rotate: -30,
+      opacity: 0,
+    },
+    onscreen: {
+      y: 0,
+      rotate: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        bounce: 0.4,
+        duration: 0.8,
+      },
+    },
+  };
+  const [count, setCount] = useState(0);
+
   return (
-    <Box margin={0}>
-      <Box
+    <Box margin={0} overflow={"hidden"}>
+      {/* <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
@@ -130,11 +149,62 @@ export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
             />
           </div>
         </Box>
+      </Box> */}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        padding={"3vw 0vw"}
+        marginTop={2}
+        // initial={{ opacity: 0, y: 20 }}
+        // animate={{ opacity: 1, y: 0 }}
+        // transition={{ delay: 0.2, duration: 0.5 }}
+      >
+        <Grid>
+          <Typography
+            variant="h5"
+            marginBottom={2}
+            color={darkMode ? "textPrimary" : "inherit"}
+          >
+            Demon Buster
+          </Typography>
+          <Typography
+            variant="h5"
+            marginBottom={1}
+            color={darkMode ? "textPrimary" : "inherit"}
+          >
+            Level: {Math.floor(myLvl)}
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            sx={{ width: "35vw" }}
+            value={(myLvl - Math.floor(myLvl)) * 100}
+          />
+        </Grid>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <motion.div
+            style={{ width: "50vw", height: "75vw", position: "relative" }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <Image
+              src="/profilePics/strong3.png"
+              alt="profile pic"
+              fill
+              objectFit="cover"
+            />
+          </motion.div>
+        </Box>
       </Box>
       <Divider variant="middle" sx={{ margin: "2rem 0" }} /> {/* Use Divider */}
       <Grid item xs={12}>
         <Box display="flex" justifyContent={"space-between"}>
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
             <Button
               variant={hexShort ? "contained" : "outlined"}
               onClick={() => setHexShort(true)}
@@ -148,7 +218,7 @@ export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
             >
               Detailed
             </Button>
-          </div>
+          </motion.div>
           <Typography
             variant="h5"
             marginBottom={1}
@@ -156,6 +226,9 @@ export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
             sx={{
               paddingRight: 2,
             }}
+            // initial={{ opacity: 0, y: 20 }}
+            // animate={{ opacity: 1, y: 0 }}
+            // transition={{ delay: 0.2, duration: 0.5 }}
           >
             Stats
           </Typography>
@@ -174,22 +247,41 @@ export default function ProfilePage({ darkMode }: { darkMode: boolean }) {
           Skills
         </Typography>
       </Grid>
-      {skillsLevel.map((lvl, i) => {
-        const tempSkill = skillsList[i];
-        if (lvl === 0) return null;
-        return (
-          <Grid item key={tempSkill.id}>
-            <SkillCard skill={tempSkill} lvl={lvl} />
-          </Grid>
-        );
-      })}
+      <Box marginBottom={10}>
+        {skillsLevel.map((lvl, i) => {
+          const tempSkill = skillsList[i];
+          if (lvl === 0) return null;
+          return (
+            <motion.div
+              key={tempSkill.id}
+              initial="offscreen"
+              whileInView="onscreen"
+              viewport={{ once: true, amount: 0.8 }}
+            >
+              <motion.div variants={cardVariants}>
+                <Grid item key={tempSkill.id}>
+                  <SkillCard skill={tempSkill} lvl={lvl} />
+                </Grid>
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </Box>
       {skillsLevel.every((lvl) => lvl === 0) && (
         <Box textAlign="center" my={5}>
-          <Typography variant="body1" marginBottom={2}>
+          <Typography
+            variant="body1"
+            marginBottom={2}
+            color={darkMode ? "grey" : "black"}
+          >
             Unleash your potential! 🚀 Gain valuable skills by completing tasks
             and watch your abilities grow.
           </Typography>
-          <Typography variant="body1" paddingBottom={4}>
+          <Typography
+            variant="body1"
+            paddingBottom={4}
+            color={darkMode ? "grey" : "black"}
+          >
             Don&apos;t wait &ndash; start your journey of improvement today!
           </Typography>
         </Box>

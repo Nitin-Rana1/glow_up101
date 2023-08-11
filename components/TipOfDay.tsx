@@ -2,6 +2,7 @@ import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import { buttonLines, skillsList, statsNumber, tipsList } from "../data";
 import { useEffect, useState } from "react";
 import TipCard from "./Cards/TipCard";
+import { motion } from "framer-motion";
 export default function TipOfDay() {
   const [tips, setTips] = useState<Tip[]>([]);
 
@@ -55,9 +56,25 @@ export default function TipOfDay() {
   }, [tips]);
 
   return (
-    <Grid container direction="column" alignItems="center" spacing={3}>
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      spacing={3}
+      paddingTop={2}
+    >
       {tips.map((val, i) => (
-        <Grid item key={"TipOfDay" + i.toString()} xs={12} sm={6} md={4}>
+        <Grid
+          key={"TipOfDay" + i.toString()}
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          component={motion.div}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.2 }}
+        >
           <Card>
             <CardContent>
               <TipCard tip={val} />

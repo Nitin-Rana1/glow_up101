@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import Chart, { ChartData, ChartOptions } from "chart.js/auto";
-
+import { motion } from "framer-motion";
 export default function HexagonDiagram({
   data,
 }: {
@@ -59,11 +59,17 @@ export default function HexagonDiagram({
   }, [data]);
   if (!data) return <div>No Stats Yet!!</div>;
   return (
-    <canvas
-      style={{ padding: "0" }}
-      ref={chartRef}
-      width={400}
-      height={400}
-    ></canvas>
+    <motion.div
+      initial={{ opacity: 1, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.5 }}
+    >
+      <canvas
+        style={{ padding: "0" }}
+        ref={chartRef}
+        width={400}
+        height={400}
+      ></canvas>
+    </motion.div>
   );
 }
