@@ -40,7 +40,7 @@ const darkTheme = createTheme({
 });
 
 export default function Home() {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
   // Toggle between light and dark modes
   const toggleDarkMode = () => {
